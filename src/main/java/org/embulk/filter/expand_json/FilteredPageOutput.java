@@ -43,6 +43,7 @@ import org.embulk.util.config.units.ColumnConfig;
 import org.embulk.util.json.JsonParseException;
 import org.embulk.util.json.JsonParser;
 import org.embulk.util.timestamp.TimestampFormatter;
+import org.msgpack.core.MessageTypeCastException;
 import org.msgpack.value.Value;
 import org.msgpack.value.ValueFactory;
 import org.slf4j.Logger;
@@ -357,7 +358,7 @@ public class FilteredPageOutput
                 try {
                     pageBuilder.setDouble(expandedJsonColumn.getColumn(), value.asFloatValue().toDouble());
                 }
-                catch (NumberFormatException e) {
+                catch (MessageTypeCastException e) {
                     throw new JsonValueInvalidException(String.format("Failed to parse '%s' as double", expandedJsonColumn.getKey()), e);
                 }
             }
@@ -365,12 +366,12 @@ public class FilteredPageOutput
                 try {
                     pageBuilder.setLong(expandedJsonColumn.getColumn(), value.asIntegerValue().toLong());
                 }
-                catch (NumberFormatException e) {
+                catch (MessageTypeCastException e) {
                     // ad-hoc workaround for exponential notation
                     try {
                         pageBuilder.setLong(expandedJsonColumn.getColumn(), (long) value.asFloatValue().toDouble());
                     }
-                    catch (NumberFormatException e2) {
+                    catch (MessageTypeCastException e2) {
                         throw new JsonValueInvalidException(String.format("Failed to parse '%s' as long", expandedJsonColumn.getKey()), e);
                     }
                 }
