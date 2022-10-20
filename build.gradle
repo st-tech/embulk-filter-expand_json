@@ -11,7 +11,7 @@ repositories {
 }
 
 group = "org.embulk"
-version = "0.6.2-SNAPSHOT"
+version = "0.6.3-SNAPSHOT"
 description = "Expand Json"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
