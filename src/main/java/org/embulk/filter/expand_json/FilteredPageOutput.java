@@ -343,7 +343,7 @@ public class FilteredPageOutput
             }
 
             final Value value = map.get(ValueFactory.newString(expandedJsonColumn.getKey()));
-            if (value == null) {
+            if (value == null || value.isNilValue()) {
                 pageBuilder.setNull(expandedJsonColumn.getColumn());
                 continue;
             }
