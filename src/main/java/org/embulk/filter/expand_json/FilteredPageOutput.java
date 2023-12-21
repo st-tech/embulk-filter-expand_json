@@ -359,7 +359,13 @@ public class FilteredPageOutput
                     pageBuilder.setDouble(expandedJsonColumn.getColumn(), value.asFloatValue().toDouble());
                 }
                 catch (MessageTypeCastException e) {
-                    throw new JsonValueInvalidException(String.format("Failed to parse '%s' as double", expandedJsonColumn.getKey()), e);
+                    try {
+                        // ad-hoc workaround for decimal point missing
+                        pageBuilder.setDouble(expandedJsonColumn.getColumn(), (double) value.asIntegerValue().toLong());
+                    }
+                    catch (MessageTypeCastException e2) {
+                        throw new JsonValueInvalidException(String.format("Failed to parse '%s' as double", expandedJsonColumn.getKey()), e);
+                    }
                 }
             }
             else if (Types.LONG.equals(expandedJsonColumn.getColumn().getType())) {
